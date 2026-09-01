@@ -37,11 +37,20 @@ import (
 // against hyperfleet-api's pkg/config/server.go and pkg/registry at each tag;
 // see PR #6 review discussion).
 //
-// Pinned to v0.4.0 specifically because it also carries
+// Pinned to 0.4.0 specifically because it also carries
 // HYPERFLEET-1603 (hyperfleet-api#364, merged to main 2026-09-01): database
 // credentials via HYPERFLEET_DATABASE_*_FILE (ResolveFileOverrides in
-// pkg/config/db.go) — verified field-for-field present at the v0.4.0 tag.
-const DefaultImage = "quay.io/openshift-hyperfleet/hyperfleet-api:v0.4.0"
+// pkg/config/db.go) — verified field-for-field present at the v0.4.0 git tag.
+//
+// Registry is redhat-services-prod, not openshift-hyperfleet: hyperfleet-api's
+// Konflux pipelines (.tekton/hyperfleet-api-{push,tag}.yaml) publish only to
+// the redhat-user-workloads staging tenant; a separate Konflux Release step
+// promotes to redhat-services-prod, which is what actually carries a signed,
+// pullable 0.4.0 tag (verified against quay.io's tag API — the tag has no "v"
+// prefix there, unlike the hyperfleet-api git tag). openshift-hyperfleet/hyperfleet-api
+// is a legacy pre-Konflux registry that stopped receiving pushes after v0.2.1
+// and never got a v0.4.0 image at all (PR #6 review comment r3905519856).
+const DefaultImage = "quay.io/redhat-services-prod/hyperfleet-tenant/hyperfleet/hyperfleet-api:0.4.0"
 
 // Component renders the HyperFleet API operand. It satisfies the bundle.Component
 // contract structurally (no import of internal/bundle, avoiding an import cycle:
